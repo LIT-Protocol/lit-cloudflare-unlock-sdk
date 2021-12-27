@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "yarn minify lit-unlock.js > ./dist/tmp.min.js && sed '1d' ./dist/tmp.min.js > ./dist/lit-unlock.min.js && rm ./dist/tmp.min.js && yarn minify lit-unlock.css > ./dist/tmp.min.css && sed '1d' ./dist/tmp.min.css > ./dist/lit-unlock.min.css && rm ./dist/tmp.min.css"
+    "build": "rm -rf ./dist/tmp && mkdir ./dist/tmp && yarn minify lit-unlock.js > ./dist/tmp/tmp.min.js && sed '1d' ./dist/tmp/tmp.min.js > ./dist/tmp/lit-unlock.min.js && rm ./dist/tmp/tmp.min.js && yarn minify lit-unlock.css > ./dist/tmp/tmp.min.css && sed '1d' ./dist/tmp/tmp.min.css > ./dist/tmp/lit-unlock.min.css && rm ./dist/tmp/tmp.min.css && rm -rf ./dist/$(grep version .env | cut -d '=' -f2) && mv ./dist/tmp ./dist/$(grep version .env | cut -d '=' -f2)"
   },
   "devDependencies": {
     "minify": "^8.0.3"
