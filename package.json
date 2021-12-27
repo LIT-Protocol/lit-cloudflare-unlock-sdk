@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build": "yarn minify lit-unlock.js > ./dist/tmp.min.js && sed '1d' ./dist/tmp.min.js > ./dist/lit-unlock.min.js && rm ./dist/tmp.min.js && yarn minify lit-unlock.css > ./dist/tmp.min.css && sed '1d' ./dist/tmp.min.css > ./dist/lit-unlock.min.css && rm ./dist/tmp.min.css"
+  },
+  "devDependencies": {
+    "minify": "^8.0.3"
+  }
+}
