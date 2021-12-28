@@ -25,46 +25,12 @@ buf2hex = (buffer) => [...new Uint8Array(buffer)]
         .map((x) => x.toString(16).padStart(2, "0"))
         .join("");
 
-// ----- unlock
-
-//
-// (Deprecated) Decrypt videoId
-// @param { HTMLElement } element
-// @returns { void }
-// 
-async function onClickedUnlock(e){
-    var data = JSON.parse(atob(e.getAttribute('data-lit')));
-
-    const accessControlConditions = JSON.parse(atob(data['accessControlConditions']));
-    const encryptedZip = dataURItoBlob(data['encryptedZip']);
-    const toDecrypt = buf2hex(new Uint8Array(atob(data['encryptedSymmetricKey']).split(',').map((x) => parseInt(x))));
-    const chain = accessControlConditions[0].chain;
-    const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: chain});
-    
-    const decryptedSymmetricKey = await window.litNodeClient.getEncryptionKey({
-        accessControlConditions,
-        toDecrypt,
-        chain,
-        authSig
-    });
-
-    const decryptedFiles = await LitJsSdk.decryptZip(encryptedZip, decryptedSymmetricKey);
-    const decryptedString = await decryptedFiles["string.txt"].async("text"); // video id
-
-    if(decryptedString != null & decryptedString != ''){
-        console.log("Unlocked");
-        const url = `https://iframe.videodelivery.net/${decryptedString}`;
-        e.src = url;
-        e.parentElement.classList.add('active');
-    }
-}
-
 // 
 // Get video id
 // @param { HTMLElmenet } e
 // @returns { void } 
 //
-async function onClickedUnlockJWT(e){
+async function onClickedUnlock(e){
 
     const data = JSON.parse(atob(e.getAttribute('data-lit')));
     const accessControlConditions = JSON.parse(atob(data['accessControlConditions']));
@@ -76,7 +42,7 @@ async function onClickedUnlockJWT(e){
 
     // -- prepare
     const jwt = await litNodeClient.getSignedToken({ accessControlConditions, chain, authSig, resourceId });
-    const url = `http://127.0.0.1:8787/api/video_id?jwt=${jwt}`;
+    const url = `https://cf-worker.gtc-lightanson.workers.dev/api/video_id?jwt=${jwt}`;
     console.warn(url);
 
     // -- execute
@@ -120,7 +86,7 @@ function manipulateWrapper(wrapper){
         
         const {btn, wrapper, iframe} = manipulateWrapper(_wrapper);
         
-        [btn, wrapper].forEach((e) => e.addEventListener('click', () => onClickedUnlockJWT(iframe)));
+        [btn, wrapper].forEach((e) => e.addEventListener('click', () => onClickedUnlock(iframe)));
 
     });
 })();
