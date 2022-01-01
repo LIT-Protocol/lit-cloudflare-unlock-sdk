@@ -41,8 +41,11 @@ async function onClickedUnlock(e){
     const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: chain});
 
     // -- prepare
+    const lit_id = document.getElementById('lit-server');
+    const server = lit_id.getAttribute('src').split('?server=')[1];
+    console.log(`👉 SERVER: ${server}`);
     const jwt = await litNodeClient.getSignedToken({ accessControlConditions, chain, authSig, resourceId });
-    const url = `https://cf-worker.gtc-lightanson.workers.dev/api/video_id?jwt=${jwt}`;
+    const url = `${server}/api/video_id?jwt=${jwt}`;
     console.warn(url);
 
     // -- execute
@@ -82,6 +85,7 @@ function manipulateWrapper(wrapper){
 
 // mounted
 (() => {
+    
     [...document.getElementsByClassName('lit-video-wrapper')].forEach((_wrapper) => {
         
         const {btn, wrapper, iframe} = manipulateWrapper(_wrapper);
