@@ -91,3 +91,16 @@
     color: #8159D9;
     text-shadow: 2px 2px 0px black;
 }
+.lit-video-live {
+    width: 24px;
+    height: 24px;
+    right: 6px;
+    top: 4px;
+    position: absolute;
+    animation: fadeInFromNone 2.618s ease infinite;
+}
+@keyframes fadeInFromNone {
+    0% {opacity: 1; color:#ffd73a}
+    50% {opacity: 1; color: red}
+    100% {opacity: 1;color:#ffd73a}
+}
