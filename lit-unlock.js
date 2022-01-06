@@ -45,7 +45,7 @@ async function onClickedUnlock(e) {
   // -- prepare
   // const lit_id = document.getElementById('lit-server');
   // const server = lit_id.getAttribute('src').split('?server=')[1];
-  const server = e.getAttribute("data-server");
+  const server = atob(e.getAttribute("data-server"));
   console.log(`🔓 SERVER: ${server}`);
   const jwt = await litNodeClient.getSignedToken({
     accessControlConditions,
