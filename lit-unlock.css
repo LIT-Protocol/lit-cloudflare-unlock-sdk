@@ -1,50 +1,89 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
+:root{
+    --lit-purple-1: #8159D9;
+    --lit-transition-slow: 2s cubic-bezier(0.4, 0, 0.2, 1);
+    --lit-transition-default: 1s cubic-bezier(0.4, 0, 0.2, 1);
+    --lit-transition-fast: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --lit-gradient: linear-gradient(141deg, #13042E 25%, #22073D 40%, #13042E 55%);
+}
+
 .lit-4-cols{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 12px;
 }
+
+/* --- Video Wrapper -- */
 .lit-video-wrapper {
-    /* padding-top: calc(9% / 16 * 100); */
-    position: relative;
-    border: 1px solid #8159D9;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0.93;
-    border-radius: 4px;
     overflow: hidden;
-    max-width: 345px;
+    width: 345px;
     height: 195.5px;
+    border-radius: 4px;
+    position: relative;
+    border: 1px solid var(--lit-purple-1);
+    cursor: pointer;
+    transition: var(--lit-transition-fast);
+    opacity: .9;
 }
 .lit-video-wrapper:hover{
-    box-shadow: 0px 0px 12px black;
+    opacity: 1;
+    box-shadow: 0 0 12px black;
 }
+
+/** --- Video Overlay --- **/
 .lit-video-overlay{
     width: 100%;
     height: 100%;
-    background:linear-gradient(141deg, #13042E 25%, #22073D 40%, #13042E 55%);
+    background: var(--lit-gradient);
     position: absolute;
     top: 0;
     left: 0;
-    transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--lit-transition-default);
+    display: flex;
+    justify-content: center;
 }
 .active .lit-video-overlay{
-    /* top: -50%; */
     opacity: 0;
     pointer-events: none;
 }
 
-.lit-video-wrapper:hover{
-    opacity: 1;
+/** --- Video Description --- **/
+.lit-video-description{
+    margin: auto;
+    text-align: center;
+    padding: 0px 12px;
+    box-sizing: border-box;
+    width: 100%;
+    font-family: 'Roboto';
+    font-weight: 300;
+    font-size: 32px;
 }
-.active.lit-video-wrapper iframe{
-    opacity: 1;
-    visibility: visible;
+.lit-video-description > button{
+    display: block;
+    margin: auto;
+    width: 100%;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 0.8em;
+    text-shadow: 1px 2px black;
+    pointer-events: none;
 }
+
+/** --- Access Control Conditions -- **/
+.lit-video-info{
+    width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+    font-size: 0.4em;
+    color: var(--lit-purple-1);
+    text-shadow: 2px 2px 0px black;
+}
+
+/** --- iframe --- **/
 .lit-video-wrapper iframe {
-    transition: 2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--lit-transition-slow);
     position: absolute;
     top: 0;
     left: 0;
@@ -54,43 +93,12 @@
     opacity: 0;
     visibility: hidden;
 }
-.lit-video-description {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-    background: transparent;
-    color: white;
-    font-family: 'Roboto';
-    font-weight: 300;
-    font-size:32px;
-    border: none;
-    cursor: pointer;
-    box-sizing: border-box;
-    position: absolute;
-    top: calc(91% - (9% / 16 * 100));
-    transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.active.lit-video-wrapper iframe{
     opacity: 1;
-    padding: 0 12px;
-    box-sizing: border-box;
+    visibility: visible;
 }
-.active .lit-video-description {
-    opacity: 0;
-    pointer-events: none;
-    /* padding-top: 200px; */
-}
-.btn-lit-video-unlock {
-    background: transparent;
-    color: white;
-    border: none;
-    font-size: 0.8em;
-    text-shadow: 1px 2px black;
-    pointer-events: none;
-}
-.lit-video-info {
-    font-size: 0.4em;
-    color: #8159D9;
-    text-shadow: 2px 2px 0px black;
-}
+
+/** --- Live Icon --- **/
 .lit-video-live {
     width: 24px;
     height: 24px;
@@ -103,4 +111,26 @@
     0% {opacity: 1; color:#ffd73a}
     50% {opacity: 1; color: red}
     100% {opacity: 1;color:#ffd73a}
+}
+
+/** --- Video Message --- **/
+.lit-video-msg {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: white;
+    background: rgba(0,0,0,0.5);
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-family: 'Roboto';
+    font-size: 12px;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: var(--lit-transition-fast);
+    z-index: 999999;
+}
+.active.lit-video-msg{
+    visibility: visible;
+    opacity: 1;
 }
