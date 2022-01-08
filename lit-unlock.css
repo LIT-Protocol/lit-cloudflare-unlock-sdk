@@ -24,7 +24,7 @@
     border: 1px solid var(--lit-purple-1);
     cursor: pointer;
     transition: var(--lit-transition-fast);
-    opacity: .9;
+    opacity: 0.9;
 }
 .lit-video-wrapper:hover{
     opacity: 1;
@@ -58,6 +58,7 @@
     font-family: 'Roboto';
     font-weight: 300;
     font-size: 32px;
+    pointer-events: none;
 }
 .lit-video-description > button{
     display: block;
@@ -96,6 +97,7 @@
 .active.lit-video-wrapper iframe{
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
 }
 
 /** --- Live Icon --- **/
@@ -133,4 +135,9 @@
 .active.lit-video-msg{
     visibility: visible;
     opacity: 1;
+}
+
+/** --- Video Snippets --- **/
+.lit-video-snippet{
+    pointer-events: none;
 }

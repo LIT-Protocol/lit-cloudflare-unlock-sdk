@@ -61,17 +61,57 @@ const liveIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="
 </svg>`;
 
 //
+// Everytime a snippet is copied it will temporarily store
+// the "save session" and expires in 10 seconds to be able
+// to copy again
+// 
+var copyMemory = [];
+
+//
+// Toggle video message
+// @param { Element } onClicked element
+// @param { String } id : uniqueId to store in temp memory
+// @returns { void } 
+//
+function copySnippet(e, id){
+
+
+  // -- validate
+  // stop copying if it's already copied
+  if(copyMemory.includes(id)){
+    alert("Copied already, please wait 5 seconds");
+    return;
+  }
+
+  console.log("CopyMemory:", copyMemory);
+  console.log(id);
+
+  // -- copy snippet
+  const snippet = e.parentElement.querySelector('.lit-video-snippet').innerText;
+  navigator.clipboard.writeText(snippet);
+
+  const msg = e.parentElement.querySelector('.lit-video-msg');
+  msg.classList.add('active');
+
+  // add to copy memory
+  copyMemory.push(id);
+
+  setTimeout(() => {
+    msg.classList.remove('active');
+  }, 2000);
+
+  // clear session and allow to copy again
+  setTimeout(() => {
+    copyMemory = copyMemory.filter((_id) => _id != id);
+  }, 5000);
+}
+
+//
 // Get video id
 // @param { HTMLElmenet } e
 // @returns { void }
 //
 async function onClickedUnlock(e) {
-  // -- copy snippet
-  const snippet = e.parentElement.querySelector('.lit-video-snippet').innerText;
-  navigator.clipboard.writeText(snippet);
-
-  // -- show copied message
-  e.parentElement.querySelector('.lit-video-msg').classList.add('active');
   
   // -- prepare
   const data = JSON.parse(atob(e.getAttribute("data-lit")));
@@ -79,6 +119,11 @@ async function onClickedUnlock(e) {
   const resourceId = JSON.parse(atob(data["resourceId_base64"]));
   console.log(`🔓resourceId: ${JSON.stringify(resourceId)}`);
   const chain = accessControlConditions[0].chain;
+
+  // -- copy snippet
+  copySnippet(e, btoa(e));
+  
+  // -- continue prepare
   const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: chain });
 
   const server = atob(e.getAttribute("data-server"));
@@ -93,16 +138,12 @@ async function onClickedUnlock(e) {
   const url = `${server}/api/video_id?jwt=${jwt}`;
   console.warn(url);
 
-
-
   // -- execute
   const res = await fetch(url);
   const token = await res.json();
 
   e.src = `https://iframe.videodelivery.net/${token}`;
   e.parentElement.classList.add("active");
-
-
 }
 
 //
@@ -168,7 +209,8 @@ function manipulateWrapper(wrapper) {
   return { btn, wrapper, iframe };
 }
 
-// mounted
+
+// ----- mounted -----
 (() => {
   [...document.getElementsByClassName("lit-video-wrapper")].forEach(
     (_wrapper) => {
@@ -180,3 +222,4 @@ function manipulateWrapper(wrapper) {
     }
   );
 })();
+
